@@ -13,7 +13,7 @@
 //    → Quem tem acesso: QUALQUER PESSOA  ← NÃO é "com conta Google"!
 // 5. Copie a URL → cole no SHEETS_URL do index.html
 //
-// ⚠️  Mudou o código? → Implantar → Gerenciar implantações
+// Mudou o código? → Implantar → Gerenciar implantações
 //     → Editar → Versão: Nova versão → Implantar
 // ============================================================
 
