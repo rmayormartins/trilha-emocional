@@ -187,7 +187,7 @@ body{
 
     <div class="welcome" id="welcomeScreen" style="display:none">
       <div class="mascot">&#128187;&#127758;</div>
-      <h1>Trilha das Atitudes</h1>
+      <h1>Trilha Emocional</h1>
       <p class="sub">Voc&#234; &#233; um <b>Explorador Digital</b>! Ajude os personagens a resolver problemas online, ganhe estrelas e descubra seu perfil emocional digital.</p>
       <div class="field"><label>Seu nome (opcional)</label><input type="text" id="inputName" placeholder="An&#244;nimo"></div>
       <div class="field"><label>Sua idade (opcional)</label><input type="text" id="inputAge" placeholder="&#8212;"></div>
@@ -237,7 +237,7 @@ body{
 <script>
 var CONFIG = {
   QUESTIONS_FILE: 'questions.txt',
-  SHEETS_URL: 'https://script.google.com/macros/s/AKfycbz7iyov3hlFAgV2xfzAXDEVqqECgS_0DvyoCJVuRKi91OdlDyXPOZEz_V6_u7OIoynHQg/exec',
+  SHEETS_URL: '',
   COINS_PER_POINT: 50,
   COINS_FLOOR: 25,
   STARS_PER_QUESTION: 1
@@ -249,6 +249,7 @@ var coins = 0;
 var stars = 0;
 var totalScore = 0;
 var dimScores = {};
+var responses = [];
 var sessionId = (crypto.randomUUID ? crypto.randomUUID() : 'S' + Date.now() + Math.random().toString(36).slice(2,8));
 var participantName = '';
 var participantAge = '';
@@ -503,14 +504,11 @@ function selectOption(qIdx,optIdx){
   $('qFooter').style.display='block';
   setTimeout(function(){ $('qFeedback').scrollIntoView({behavior:'smooth',block:'end'}); },100);
 
-  sendResponse({
-    timestamp:new Date().toISOString(), sessionId:sessionId,
-    participantName:participantName||'An\u00f4nimo', participantAge:participantAge||'\u2014',
-    questionIndex:qIdx, questionText:q.text, fase:q.fase, tema:q.tema,
-    selectedIndex:optIdx, selectedText:q.options[optIdx],
-    isCorrect:isCorrect, pointsEarned:pts, responseTimeMs:elapsed,
-    coinsEarned:earnedCoins, starsEarned:CONFIG.STARS_PER_QUESTION,
-    totalCoins:coins, totalStars:stars, totalScore:totalScore
+  // acumular resposta (envia tudo junto no final)
+  responses.push({
+    questionIndex:qIdx, selectedIndex:optIdx,
+    selectedText:q.options[optIdx], pointsEarned:pts,
+    isCorrect:isCorrect, responseTimeMs:elapsed
   });
 }
 
@@ -547,10 +545,13 @@ function showFinish(){
     barsHTML+='<div class="dim-row"><div class="dim-label">'+tema+'</div><div class="dim-track"><div class="dim-fill" style="width:'+dpct+'%;background:'+col+'"></div></div><div class="dim-val" style="color:'+col+'">'+dpct+'%</div></div>';
   }
   $('dimBars').innerHTML=barsHTML;
+
+  // enviar todas as respostas de uma vez
+  sendAllResponses();
 }
 
 $('btnReplay').addEventListener('click',function(){
-  currentQ=0;coins=0;stars=0;totalScore=0;dimScores={};
+  currentQ=0;coins=0;stars=0;totalScore=0;dimScores={};responses=[];
   $('coinCount').textContent='0';$('starCount').textContent='0';
   sessionId=(crypto.randomUUID?crypto.randomUUID():'S'+Date.now()+Math.random().toString(36).slice(2,8));
   updateMapState(); showScreen($('welcomeScreen'));
@@ -562,9 +563,21 @@ $('btnStart').addEventListener('click',function(){
   updateMapState(); showQuestion(0);
 });
 
-async function sendResponse(data){
+async function sendAllResponses(){
   if(!CONFIG.SHEETS_URL) return;
-  try{ await fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); }
+  var now=new Date();
+  var payload={
+    sessionId: sessionId,
+    data: now.toLocaleDateString('pt-BR'),
+    hora: now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),
+    nome: participantName||'An\u00f4nimo',
+    idade: participantAge||'\u2014',
+    respostas: responses,
+    totalScore: totalScore,
+    totalCoins: coins,
+    totalStars: stars
+  };
+  try{ await fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); }
   catch(e){ console.warn('Envio falhou:',e); }
 }
 
