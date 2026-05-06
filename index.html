@@ -34,10 +34,10 @@ body{
   background:#fff;position:relative;
 }
 /* ========== MAPA ========== */
-.map{position:relative;overflow:hidden;background:linear-gradient(180deg,#A8D5BA 0%,#7CB342 55%,#558B2F 100%)}
+.map{position:relative;overflow:hidden;background:linear-gradient(180deg,#87CEEB 0%,#A8D5BA 30%,#7CB342 65%,#558B2F 100%)}
 .map svg{display:block;width:100%;height:100%}
-.map .deco{position:absolute;opacity:.18;pointer-events:none;font-size:52px;animation:fl 20s ease-in-out infinite}
-.map .deco:nth-child(2){animation-delay:-5s}.map .deco:nth-child(3){animation-delay:-11s}
+.map .deco{position:absolute;opacity:.22;pointer-events:none;font-size:48px;animation:fl 20s ease-in-out infinite}
+.map .deco:nth-child(2){animation-delay:-5s;font-size:40px}.map .deco:nth-child(3){animation-delay:-11s;font-size:36px}.map .deco:nth-child(4){animation-delay:-15s;font-size:32px}
 @keyframes fl{0%,100%{transform:translateX(0)}50%{transform:translateX(18px)}}
 .topbar{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:10px;z-index:5;pointer-events:none}
 .pill{
@@ -91,11 +91,11 @@ body{
 /* questão */
 .question-screen{flex:1;display:none;flex-direction:column;padding:0;overflow:hidden}
 .q-ctx{
-  padding:12px 20px;font-size:13px;line-height:1.4;
+  padding:14px 20px;font-size:15px;line-height:1.45;
   color:#fff;position:relative;
 }
-.q-ctx .ctx-fase{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.8px;opacity:.85;margin-bottom:2px}
-.q-ctx .ctx-text{opacity:.92;font-style:italic}
+.q-ctx .ctx-fase{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.8px;opacity:.9;margin-bottom:4px}
+.q-ctx .ctx-text{opacity:.92;font-style:italic;font-size:15px;line-height:1.5}
 .q-header{padding:14px 20px 10px;background:var(--purple-deep);color:#fff}
 .q-header .q-number{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:1px;opacity:.7}
 .q-header .q-text{font-size:16px;font-weight:600;line-height:1.4;margin-top:4px}
@@ -171,8 +171,9 @@ body{
 
 <div class="app">
   <div class="map" id="mapArea">
-    <div class="deco" style="top:5%;left:6%">&#9729;&#65039;</div>
-    <div class="deco" style="top:12%;right:8%">&#9729;&#65039;</div>
+    <div class="deco" style="top:3%;left:8%">&#9729;&#65039;</div>
+    <div class="deco" style="top:8%;right:5%">&#9729;&#65039;</div>
+    <div class="deco" style="top:14%;left:35%">&#9729;&#65039;</div>
     <div class="topbar">
       <div class="pill pill-coin"><div class="ic">&#129689;</div><span id="coinCount">0</span></div>
       <div class="pill pill-star"><div class="ic">&#11088;</div><span id="starCount">0</span></div>
@@ -305,37 +306,72 @@ function getPhaseNum(q){ var m=(q.fase||'').match(/Fase\s*(\d)/i); return m?m[1]
 function getPhaseColor(q){ return PHASE_COLORS[getPhaseNum(q)]||'#5C6BC0'; }
 
 function buildMap(){
-  var n=questions.length,W=800,H=700,padT=80,padB=50;
+  var n=questions.length,W=800,H=700,padT=70,padB=80;
   var usH=H-padT-padB, stepY=Math.min(usH/Math.max(n-1,1),68);
-  var startY=padT+(usH-stepY*(n-1))/2;
+  var totalH=stepY*(n-1);
+  var startY=H-padB; // Q1 at bottom
   var nodes=[];
   for(var i=0;i<n;i++){
-    var y=startY+i*stepY;
+    var y=startY-i*stepY; // goes UP
     var xBase=(i%2===0)?W*0.32:W*0.68;
     nodes.push({x:xBase+Math.sin(i*2.7)*35, y:y});
   }
   var svg='';
-  // trees
-  [{x:80,y:120},{x:700,y:160},{x:120,y:330},{x:680,y:400},{x:90,y:530},{x:720,y:580},{x:400,y:90},{x:500,y:640}]
-  .forEach(function(t){
-    svg+='<g transform="translate('+t.x+','+t.y+')"><ellipse cx="0" cy="0" rx="20" ry="26" fill="#4CAF50" opacity=".3"/><ellipse cx="0" cy="-7" rx="14" ry="18" fill="#66BB6A" opacity=".25"/></g>';
+
+  // --- mountains (back layer, top area) ---
+  svg+='<g opacity=".2">';
+  svg+='<polygon points="0,180 120,60 240,180" fill="#2E7D32"/>';
+  svg+='<polygon points="160,200 320,40 480,200" fill="#1B5E20"/>';
+  svg+='<polygon points="400,190 540,55 680,190" fill="#2E7D32"/>';
+  svg+='<polygon points="580,200 720,70 800,160 800,200" fill="#1B5E20"/>';
+  // snow caps
+  svg+='<polygon points="105,75 120,60 135,75" fill="#fff" opacity=".5"/>';
+  svg+='<polygon points="305,55 320,40 335,55" fill="#fff" opacity=".5"/>';
+  svg+='<polygon points="525,70 540,55 555,70" fill="#fff" opacity=".5"/>';
+  svg+='</g>';
+
+  // --- hills (mid layer) ---
+  svg+='<ellipse cx="150" cy="280" rx="140" ry="50" fill="#66BB6A" opacity=".2"/>';
+  svg+='<ellipse cx="650" cy="320" rx="130" ry="45" fill="#81C784" opacity=".18"/>';
+  svg+='<ellipse cx="400" cy="450" rx="160" ry="55" fill="#66BB6A" opacity=".15"/>';
+
+  // --- trees (scattered) ---
+  var trees=[
+    {x:60,y:250,s:1},{x:140,y:200,s:.8},{x:720,y:230,s:.9},{x:680,y:280,s:.7},
+    {x:100,y:400,s:.85},{x:710,y:440,s:.75},{x:50,y:530,s:.9},{x:740,y:520,s:.8},
+    {x:180,y:560,s:.65},{x:620,y:580,s:.7},{x:400,y:170,s:.75},{x:550,y:250,s:.6}
+  ];
+  trees.forEach(function(t){
+    svg+='<g transform="translate('+t.x+','+t.y+') scale('+t.s+')" opacity=".35">';
+    svg+='<rect x="-3" y="0" width="6" height="18" rx="2" fill="#795548"/>';
+    svg+='<ellipse cx="0" cy="-8" rx="16" ry="22" fill="#4CAF50"/>';
+    svg+='<ellipse cx="0" cy="-16" rx="11" ry="15" fill="#66BB6A"/>';
+    svg+='</g>';
   });
-  // house
-  svg+='<g transform="translate('+(W/2)+',32)"><rect x="-20" y="-7" width="40" height="26" rx="3" fill="#8D6E63" stroke="#6D4C41" stroke-width="2"/><polygon points="-26,-7 0,-25 26,-7" fill="var(--red-roof)" stroke="#B71C1C" stroke-width="1.5"/><rect x="-5" y="4" width="10" height="14" rx="2" fill="#FFE082"/></g>';
-  // phase dividers (horizontal labels)
-  var phases={},lastPhase='';
-  for(var i=0;i<n;i++){
-    var ph=getPhaseNum(questions[i]);
-    if(ph!==lastPhase){ phases[i]=questions[i].fase; lastPhase=ph; }
-  }
-  // paths
+
+  // --- small bushes ---
+  [{x:300,y:350},{x:500,y:490},{x:200,y:620},{x:600,y:650},{x:750,y:370}].forEach(function(b){
+    svg+='<ellipse cx="'+b.x+'" cy="'+b.y+'" rx="18" ry="10" fill="#81C784" opacity=".25"/>';
+  });
+
+  // --- house at bottom (start) ---
+  var hx=nodes[0].x, hy=nodes[0].y+50;
+  svg+='<g transform="translate('+hx+','+hy+')">';
+  svg+='<rect x="-24" y="-10" width="48" height="30" rx="4" fill="#8D6E63" stroke="#6D4C41" stroke-width="2"/>';
+  svg+='<polygon points="-30,-10 0,-32 30,-10" fill="var(--red-roof)" stroke="#B71C1C" stroke-width="1.5"/>';
+  svg+='<rect x="-6" y="2" width="12" height="16" rx="2" fill="#FFE082"/>';
+  svg+='<text x="0" y="38" text-anchor="middle" font-family="\'Baloo 2\',sans-serif" font-weight="700" font-size="11" fill="#5D4037" opacity=".7">IN\u00cdCIO</text>';
+  svg+='</g>';
+
+  // --- paths ---
   for(var i=0;i<n-1;i++){
     var a=nodes[i],b=nodes[i+1],mx=(a.x+b.x)/2;
     var d='M'+a.x+','+a.y+' Q'+(mx+(i%2?-55:55))+','+((a.y+b.y)/2)+' '+b.x+','+b.y;
     svg+='<path class="trail-path" id="trail'+i+'" d="'+d+'"/>';
     svg+='<path class="trail-path-done" id="trailDone'+i+'" style="display:none" d="'+d+'"/>';
   }
-  // nodes
+
+  // --- nodes ---
   for(var i=0;i<n;i++){
     var nd=nodes[i],st=(i===0?'current':'locked');
     var col=getPhaseColor(questions[i]);
@@ -344,7 +380,17 @@ function buildMap(){
     svg+='<circle class="node-circle" r="24" fill="'+fillCol+'" stroke="'+(i===0?col:'#757575')+'" stroke-width="3.5" data-phase-color="'+col+'"/>';
     svg+='<text class="node-label" text-anchor="middle" dy="6" fill="#fff" font-family="\'Baloo 2\',sans-serif" font-weight="800" font-size="17">'+(i+1)+'</text></g>';
   }
-  if(n>0){ var last=nodes[n-1]; svg+='<text x="'+(last.x+36)+'" y="'+(last.y-8)+'" font-size="26">&#127937;</text>'; }
+
+  // --- flag at top (finish) ---
+  if(n>0){
+    var last=nodes[n-1];
+    svg+='<g transform="translate('+(last.x+34)+','+(last.y-20)+')">';
+    svg+='<line x1="0" y1="0" x2="0" y2="30" stroke="#795548" stroke-width="3" stroke-linecap="round"/>';
+    svg+='<polygon points="0,0 24,7 0,14" fill="#E53935"/>';
+    svg+='<text x="12" y="38" text-anchor="middle" font-family="\'Baloo 2\',sans-serif" font-weight="700" font-size="11" fill="#B71C1C" opacity=".8">META</text>';
+    svg+='</g>';
+  }
+
   $('mapSVG').innerHTML=svg;
   document.querySelectorAll('.node').forEach(function(g){
     g.addEventListener('click',function(){
