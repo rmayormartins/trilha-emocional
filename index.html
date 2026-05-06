@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Trilha das Atitudes – Explorador Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink:#E91E63;--pink-light:#FF6B9D;--pink-deep:#AD1457;--pink-bg:#FFE0EC;
+  --purple:#3D2B5F;--purple-light:#5E4585;--purple-deep:#2A1B45;
+  --green:#7CB342;--green-deep:#558B2F;--green-light:#AED581;
+  --cream:#FFF8E7;
+  --red-roof:#C44536;
+  --yellow:#FFC107;--yellow-deep:#FFA000;--gold:#FFD54F;
+  --shadow:rgba(0,0,0,.18);
+  --locked:#9E9E9E;--correct:#43A047;--wrong:#E53935;--neutral:#FF9800;
+  --phase-game:#5C6BC0;--phase-group:#AB47BC;--phase-social:#26A69A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Fredoka',system-ui,sans-serif}
+body{
+  background:linear-gradient(135deg,#6B4F8F 0%,#3D2B5F 60%,#2A1B45 100%);
+  display:flex;align-items:center;justify-content:center;
+  padding:12px;overflow:hidden;
+}
+.app{
+  width:100%;max-width:1180px;height:min(740px,96vh);
+  display:grid;grid-template-columns:1fr 400px;gap:0;
+  border-radius:32px;overflow:hidden;
+  box-shadow:0 30px 80px rgba(0,0,0,.45);
+  background:#fff;position:relative;
+}
+/* ========== MAPA ========== */
+.map{position:relative;overflow:hidden;background:linear-gradient(180deg,#A8D5BA 0%,#7CB342 55%,#558B2F 100%)}
+.map svg{display:block;width:100%;height:100%}
+.map .deco{position:absolute;opacity:.18;pointer-events:none;font-size:52px;animation:fl 20s ease-in-out infinite}
+.map .deco:nth-child(2){animation-delay:-5s}.map .deco:nth-child(3){animation-delay:-11s}
+@keyframes fl{0%,100%{transform:translateX(0)}50%{transform:translateX(18px)}}
+.topbar{position:absolute;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;gap:10px;z-index:5;pointer-events:none}
+.pill{
+  display:flex;align-items:center;gap:7px;background:#fff;border-radius:999px;
+  padding:5px 16px 5px 5px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:17px;
+  color:var(--purple-deep);box-shadow:0 3px 0 rgba(0,0,0,.12),0 2px 8px rgba(0,0,0,.15);
+  border:3px solid #fff;min-width:100px;
+}
+.pill .ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pill-coin .ic{background:radial-gradient(circle at 35% 30%,#FFE082,#FFA000);color:#fff;border:2px solid #FFB300}
+.pill-star .ic{background:radial-gradient(circle at 35% 30%,#CE93D8,#7B1FA2);color:#fff;border:2px solid #8E24AA}
+/* phase badge */
+.phase-badge{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:5;
+  background:#fff;border-radius:16px;padding:6px 18px;
+  font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13px;
+  color:var(--purple-deep);box-shadow:0 2px 8px rgba(0,0,0,.15);
+  white-space:nowrap;pointer-events:none;letter-spacing:.3px;
+}
+/* nós */
+.node{cursor:pointer;transition:transform .2s}.node:hover{transform:scale(1.12)}
+.node.locked{cursor:not-allowed;opacity:.5}.node.locked:hover{transform:none}
+.node.current .node-circle{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{filter:drop-shadow(0 0 6px var(--pink-light))}50%{filter:drop-shadow(0 0 16px var(--pink))}}
+.node.done .node-circle{fill:var(--correct)!important;stroke:#2E7D32!important}
+.node.done .node-label{fill:#fff!important}
+.node.locked .node-circle{fill:var(--locked)!important;stroke:#757575!important}
+.trail-path{stroke:#fff;stroke-width:6;stroke-dasharray:12 8;fill:none;opacity:.5}
+.trail-path-done{stroke:var(--correct);stroke-width:6;fill:none;opacity:.7}
+/* ========== PAINEL ========== */
+.panel{display:flex;flex-direction:column;background:var(--cream);border-left:4px solid var(--pink-bg);overflow:hidden}
+/* welcome */
+.welcome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;text-align:center;gap:14px}
+.welcome h1{font-family:'Baloo 2',sans-serif;font-size:26px;font-weight:800;color:var(--purple-deep);line-height:1.15}
+.welcome .sub{font-size:14px;color:var(--purple-light);line-height:1.45}
+.welcome .mascot{font-size:64px;margin-bottom:4px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.15))}
+.field{width:100%;text-align:left}
+.field label{display:block;font-weight:600;font-size:13px;color:var(--purple);margin-bottom:3px}
+.field input{width:100%;padding:9px 13px;border-radius:14px;border:2px solid #ddd;font-family:'Fredoka',sans-serif;font-size:15px;outline:none;transition:border-color .2s}
+.field input:focus{border-color:var(--pink)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:13px 34px;border-radius:999px;border:none;cursor:pointer;
+  font-family:'Baloo 2',sans-serif;font-weight:700;font-size:17px;
+  color:#fff;transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 0 rgba(0,0,0,.2),0 2px 12px rgba(0,0,0,.15);
+}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.btn-pink{background:linear-gradient(135deg,var(--pink-light),var(--pink-deep))}
+.btn-green{background:linear-gradient(135deg,var(--green-light),var(--green-deep))}
+/* questão */
+.question-screen{flex:1;display:none;flex-direction:column;padding:0;overflow:hidden}
+.q-ctx{
+  padding:12px 20px;font-size:13px;line-height:1.4;
+  color:#fff;position:relative;
+}
+.q-ctx .ctx-fase{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.8px;opacity:.85;margin-bottom:2px}
+.q-ctx .ctx-text{opacity:.92;font-style:italic}
+.q-header{padding:14px 20px 10px;background:var(--purple-deep);color:#fff}
+.q-header .q-number{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:1px;opacity:.7}
+.q-header .q-text{font-size:16px;font-weight:600;line-height:1.4;margin-top:4px}
+.q-body{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:9px}
+.option-btn{
+  display:flex;align-items:center;gap:11px;
+  padding:13px 14px;border-radius:16px;border:3px solid #E0D6CC;
+  background:#fff;cursor:pointer;transition:all .2s;
+  text-align:left;font-family:'Fredoka',sans-serif;font-size:15px;color:var(--purple-deep);
+}
+.option-btn:hover{border-color:var(--pink-light);background:var(--pink-bg)}
+.option-btn .letter{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;
+  background:var(--purple);color:#fff;
+}
+.option-btn.selected{border-color:var(--pink);background:var(--pink-bg)}
+.option-btn.selected .letter{background:var(--pink)}
+.option-btn.score-high{border-color:var(--correct);background:#E8F5E9}
+.option-btn.score-high .letter{background:var(--correct)}
+.option-btn.score-mid{border-color:var(--neutral);background:#FFF3E0}
+.option-btn.score-mid .letter{background:var(--neutral)}
+.option-btn.score-low{border-color:var(--wrong);background:#FFEBEE}
+.option-btn.score-low .letter{background:var(--wrong)}
+.option-btn.score-zero{border-color:#BDBDBD;background:#F5F5F5}
+.option-btn.score-zero .letter{background:#9E9E9E}
+.option-btn[disabled]{pointer-events:none}
+.option-btn .score-badge{
+  margin-left:auto;flex-shrink:0;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:12px;
+  padding:2px 9px;border-radius:999px;color:#fff;white-space:nowrap;
+}
+.score-badge.pos{background:var(--correct)}.score-badge.neg{background:var(--wrong)}.score-badge.zero{background:#9E9E9E}
+/* feedback */
+.q-feedback{padding:14px 18px;display:none;flex-direction:column;gap:7px;border-top:2px solid #eee;background:#FAFAFA}
+.q-feedback.show{display:flex}
+.fb-row{display:flex;align-items:center;gap:9px}
+.fb-row .fb-icon{font-size:26px;flex-shrink:0}
+.fb-row .fb-label{flex:1;font-weight:600;font-size:14px;color:var(--purple-deep)}
+.fb-row .fb-coins{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--yellow-deep);white-space:nowrap}
+.fb-message{font-size:13.5px;line-height:1.4;color:var(--purple);padding:9px 13px;border-radius:13px;background:#fff;border:2px solid #eee}
+.q-footer{padding:10px 18px;border-top:2px solid #eee;display:none;text-align:center}
+/* conclusão */
+.finish-screen{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;gap:12px;overflow-y:auto}
+.finish-screen h2{font-family:'Baloo 2',sans-serif;font-size:24px;font-weight:800;color:var(--purple-deep)}
+.finish-screen .trophy{font-size:72px;filter:drop-shadow(0 4px 12px rgba(0,0,0,.2))}
+.finish-stats{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.finish-stat{text-align:center}
+.finish-stat .val{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:28px;color:var(--pink-deep)}
+.finish-stat .lbl{font-size:12px;color:var(--purple-light);font-weight:600}
+.profile-card{
+  background:linear-gradient(135deg,#EDE7F6,#F3E5F5);border-radius:18px;padding:14px 20px;
+  width:100%;max-width:320px;text-align:center;border:2px solid #CE93D8;
+}
+.profile-card .title{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:15px;color:var(--purple-deep);margin-bottom:6px}
+.profile-card .level{font-size:13px;color:var(--purple);line-height:1.4}
+.profile-card .level b{color:var(--pink-deep)}
+/* dim bars */
+.dim-bars{width:100%;max-width:320px;display:flex;flex-direction:column;gap:6px}
+.dim-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--purple)}
+.dim-row .dim-label{width:100px;text-align:right;font-weight:600;flex-shrink:0}
+.dim-row .dim-track{flex:1;height:14px;background:#E0E0E0;border-radius:99px;overflow:hidden}
+.dim-row .dim-fill{height:100%;border-radius:99px;transition:width .6s}
+.dim-row .dim-val{width:36px;font-family:'Baloo 2',sans-serif;font-weight:800;font-size:13px}
+/* loading */
+.loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--purple);font-weight:600}
+.spinner{width:38px;height:38px;border:4px solid #ddd;border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:860px){.app{grid-template-columns:1fr;grid-template-rows:40% 60%;height:96vh;max-width:500px}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="map" id="mapArea">
+    <div class="deco" style="top:5%;left:6%">&#9729;&#65039;</div>
+    <div class="deco" style="top:12%;right:8%">&#9729;&#65039;</div>
+    <div class="topbar">
+      <div class="pill pill-coin"><div class="ic">&#129689;</div><span id="coinCount">0</span></div>
+      <div class="pill pill-star"><div class="ic">&#11088;</div><span id="starCount">0</span></div>
+    </div>
+    <svg id="mapSVG" viewBox="0 0 800 700" preserveAspectRatio="xMidYMid meet"></svg>
+    <div class="phase-badge" id="phaseBadge">&#127968; Pronto para explorar!</div>
+  </div>
+
+  <div class="panel">
+    <div class="loading" id="loadingScreen"><div class="spinner"></div><span>Carregando...</span></div>
+
+    <div class="welcome" id="welcomeScreen" style="display:none">
+      <div class="mascot">&#128187;&#127758;</div>
+      <h1>Trilha das Atitudes</h1>
+      <p class="sub">Voc&#234; &#233; um <b>Explorador Digital</b>! Ajude os personagens a resolver problemas online, ganhe estrelas e descubra seu perfil emocional digital.</p>
+      <div class="field"><label>Seu nome (opcional)</label><input type="text" id="inputName" placeholder="An&#244;nimo"></div>
+      <div class="field"><label>Sua idade (opcional)</label><input type="text" id="inputAge" placeholder="&#8212;"></div>
+      <button class="btn btn-pink" id="btnStart">Explorar! &#128640;</button>
+    </div>
+
+    <div class="question-screen" id="questionScreen">
+      <div class="q-ctx" id="qCtx">
+        <div class="ctx-fase" id="ctxFase"></div>
+        <div class="ctx-text" id="ctxText"></div>
+      </div>
+      <div class="q-header">
+        <div class="q-number" id="qNumber"></div>
+        <div class="q-text" id="qText"></div>
+      </div>
+      <div class="q-body" id="qBody"></div>
+      <div class="q-feedback" id="qFeedback">
+        <div class="fb-row">
+          <div class="fb-icon" id="fbIcon"></div>
+          <div class="fb-label" id="fbLabel"></div>
+          <div class="fb-coins" id="fbCoins"></div>
+        </div>
+        <div class="fb-message" id="fbMessage"></div>
+      </div>
+      <div class="q-footer" id="qFooter"><button class="btn btn-green" id="btnNext">Pr&#243;xima &#10140;</button></div>
+    </div>
+
+    <div class="finish-screen" id="finishScreen">
+      <div class="trophy">&#127942;</div>
+      <h2>Parab&#233;ns, Explorador!</h2>
+      <p>Voc&#234; completou todas as fases!</p>
+      <div class="finish-stats">
+        <div class="finish-stat"><div class="val" id="finalCoins">0</div><div class="lbl">Moedas</div></div>
+        <div class="finish-stat"><div class="val" id="finalStars">0</div><div class="lbl">Estrelas</div></div>
+        <div class="finish-stat"><div class="val" id="finalScore">0</div><div class="lbl">Pontos</div></div>
+      </div>
+      <div class="profile-card">
+        <div class="title">&#127760; Seu Perfil Emocional Digital</div>
+        <div class="level" id="profileLevel"></div>
+      </div>
+      <div class="dim-bars" id="dimBars"></div>
+      <button class="btn btn-pink" id="btnReplay">Jogar novamente &#128260;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var CONFIG = {
+  QUESTIONS_FILE: 'questions.txt',
+  SHEETS_URL: '',
+  COINS_PER_POINT: 50,
+  COINS_FLOOR: 25,
+  STARS_PER_QUESTION: 1
+};
+
+var questions = [];
+var currentQ = 0;
+var coins = 0;
+var stars = 0;
+var totalScore = 0;
+var dimScores = {};
+var sessionId = (crypto.randomUUID ? crypto.randomUUID() : 'S' + Date.now() + Math.random().toString(36).slice(2,8));
+var participantName = '';
+var participantAge = '';
+var questionStartTime = 0;
+
+var $ = function(id){ return document.getElementById(id); };
+
+// ── parse ──
+async function loadQuestions(){
+  try{
+    var resp = await fetch(CONFIG.QUESTIONS_FILE + '?v=' + Date.now());
+    if(!resp.ok) throw new Error('Arquivo n\u00e3o encontrado');
+    questions = parseQuestions(await resp.text());
+    if(!questions.length) throw new Error('Nenhuma quest\u00e3o');
+    $('loadingScreen').style.display='none';
+    $('welcomeScreen').style.display='flex';
+    buildMap();
+  }catch(e){
+    $('loadingScreen').innerHTML='<div style="color:var(--wrong);text-align:center;padding:24px"><div style="font-size:48px;margin-bottom:12px">&#9888;&#65039;</div><strong>Erro ao carregar</strong><br><span style="font-size:13px;opacity:.7">'+e.message+'</span></div>';
+  }
+}
+
+function parseQuestions(raw){
+  var lines = raw.split('\n'), qs=[], cur=null;
+  for(var i=0;i<lines.length;i++){
+    var line = lines[i].trimEnd();
+    var qm = line.match(/^#\s*Quest[a\u00e3\u00e1]o\s*(\d+)/i);
+    if(qm){ if(cur && cur.options.length>=2) qs.push(cur); cur={index:+qm[1],text:'',options:[],correct:0,points:[],feedbacks:[],fase:'',tema:'',contexto:''}; continue; }
+    if(!cur) continue;
+    var m;
+    if((m=line.match(/^FASE:\s*(.+)/i))){ cur.fase=m[1].trim(); continue; }
+    if((m=line.match(/^TEMA:\s*(.+)/i))){ cur.tema=m[1].trim(); continue; }
+    if((m=line.match(/^CONTEXTO:\s*(.+)/i))){ cur.contexto=m[1].trim(); continue; }
+    if((m=line.match(/^PERGUNTA:\s*(.+)/i))){ cur.text=m[1].trim(); continue; }
+    if((m=line.match(/^OP[C\u00c7][A\u00c3\u00c1]O:\s*(.+)/i))){ cur.options.push(m[1].trim()); continue; }
+    if((m=line.match(/^CORRETA:\s*(\d+)/i))){ cur.correct=+m[1]-1; continue; }
+    if((m=line.match(/^PONTOS_(\d+):\s*(-?\d+)/i))){ cur.points[+m[1]-1]=+m[2]; continue; }
+    if((m=line.match(/^FEEDBACK_(\d+):\s*(.+)/i))){ cur.feedbacks[+m[1]-1]=m[2].trim(); continue; }
+  }
+  if(cur && cur.options.length>=2) qs.push(cur);
+  for(var j=0;j<qs.length;j++){
+    var q=qs[j];
+    for(var k=0;k<q.options.length;k++){
+      if(q.points[k]===undefined) q.points[k]=(k===q.correct?2:0);
+      if(!q.feedbacks[k]) q.feedbacks[k]=(k===q.correct?'Boa escolha! Isso ajuda a melhorar o clima online \uD83D\uDE0A':'Vamos pensar\u2026 isso pode machucar outras pessoas \uD83D\uDE15');
+    }
+  }
+  return qs;
+}
+
+// ── mapa ──
+var PHASE_COLORS = {'1':'#5C6BC0','2':'#AB47BC','3':'#26A69A'};
+
+function getPhaseNum(q){ var m=(q.fase||'').match(/Fase\s*(\d)/i); return m?m[1]:'1'; }
+function getPhaseColor(q){ return PHASE_COLORS[getPhaseNum(q)]||'#5C6BC0'; }
+
+function buildMap(){
+  var n=questions.length,W=800,H=700,padT=80,padB=50;
+  var usH=H-padT-padB, stepY=Math.min(usH/Math.max(n-1,1),68);
+  var startY=padT+(usH-stepY*(n-1))/2;
+  var nodes=[];
+  for(var i=0;i<n;i++){
+    var y=startY+i*stepY;
+    var xBase=(i%2===0)?W*0.32:W*0.68;
+    nodes.push({x:xBase+Math.sin(i*2.7)*35, y:y});
+  }
+  var svg='';
+  // trees
+  [{x:80,y:120},{x:700,y:160},{x:120,y:330},{x:680,y:400},{x:90,y:530},{x:720,y:580},{x:400,y:90},{x:500,y:640}]
+  .forEach(function(t){
+    svg+='<g transform="translate('+t.x+','+t.y+')"><ellipse cx="0" cy="0" rx="20" ry="26" fill="#4CAF50" opacity=".3"/><ellipse cx="0" cy="-7" rx="14" ry="18" fill="#66BB6A" opacity=".25"/></g>';
+  });
+  // house
+  svg+='<g transform="translate('+(W/2)+',32)"><rect x="-20" y="-7" width="40" height="26" rx="3" fill="#8D6E63" stroke="#6D4C41" stroke-width="2"/><polygon points="-26,-7 0,-25 26,-7" fill="var(--red-roof)" stroke="#B71C1C" stroke-width="1.5"/><rect x="-5" y="4" width="10" height="14" rx="2" fill="#FFE082"/></g>';
+  // phase dividers (horizontal labels)
+  var phases={},lastPhase='';
+  for(var i=0;i<n;i++){
+    var ph=getPhaseNum(questions[i]);
+    if(ph!==lastPhase){ phases[i]=questions[i].fase; lastPhase=ph; }
+  }
+  // paths
+  for(var i=0;i<n-1;i++){
+    var a=nodes[i],b=nodes[i+1],mx=(a.x+b.x)/2;
+    var d='M'+a.x+','+a.y+' Q'+(mx+(i%2?-55:55))+','+((a.y+b.y)/2)+' '+b.x+','+b.y;
+    svg+='<path class="trail-path" id="trail'+i+'" d="'+d+'"/>';
+    svg+='<path class="trail-path-done" id="trailDone'+i+'" style="display:none" d="'+d+'"/>';
+  }
+  // nodes
+  for(var i=0;i<n;i++){
+    var nd=nodes[i],st=(i===0?'current':'locked');
+    var col=getPhaseColor(questions[i]);
+    var fillCol=(i===0?col:'var(--locked)');
+    svg+='<g class="node '+st+'" id="node'+i+'" data-index="'+i+'" transform="translate('+nd.x+','+nd.y+')">';
+    svg+='<circle class="node-circle" r="24" fill="'+fillCol+'" stroke="'+(i===0?col:'#757575')+'" stroke-width="3.5" data-phase-color="'+col+'"/>';
+    svg+='<text class="node-label" text-anchor="middle" dy="6" fill="#fff" font-family="\'Baloo 2\',sans-serif" font-weight="800" font-size="17">'+(i+1)+'</text></g>';
+  }
+  if(n>0){ var last=nodes[n-1]; svg+='<text x="'+(last.x+36)+'" y="'+(last.y-8)+'" font-size="26">&#127937;</text>'; }
+  $('mapSVG').innerHTML=svg;
+  document.querySelectorAll('.node').forEach(function(g){
+    g.addEventListener('click',function(){
+      var idx=+g.dataset.index;
+      if(idx===currentQ && !g.classList.contains('locked') && !g.classList.contains('done')) showQuestion(idx);
+    });
+  });
+}
+
+function updateMapState(){
+  document.querySelectorAll('.node').forEach(function(g,i){
+    g.classList.remove('current','locked','done');
+    var circle=g.querySelector('.node-circle');
+    if(i<currentQ){
+      g.classList.add('done');
+      var td=document.getElementById('trailDone'+i); if(td) td.style.display='';
+    }else if(i===currentQ){
+      g.classList.add('current');
+      if(circle){
+        var pc=circle.getAttribute('data-phase-color')||'var(--pink)';
+        circle.setAttribute('fill',pc); circle.setAttribute('stroke',pc);
+      }
+    }else{ g.classList.add('locked'); }
+  });
+  // update phase badge
+  if(currentQ<questions.length){
+    $('phaseBadge').textContent=questions[currentQ].fase||'Explorando...';
+    $('phaseBadge').style.background=getPhaseColor(questions[currentQ]);
+    $('phaseBadge').style.color='#fff';
+  }else{
+    $('phaseBadge').textContent='\uD83C\uDFC6 Completo!';
+    $('phaseBadge').style.background='var(--correct)';
+    $('phaseBadge').style.color='#fff';
+  }
+}
+
+// ── telas ──
+function showScreen(scr){
+  [$('welcomeScreen'),$('questionScreen'),$('finishScreen'),$('loadingScreen')].forEach(function(s){s.style.display='none';});
+  scr.style.display='flex';
+}
+
+function showQuestion(idx){
+  var q=questions[idx]; if(!q) return;
+  showScreen($('questionScreen'));
+  // context
+  var ctx=$('qCtx');
+  var phColor=getPhaseColor(q);
+  ctx.style.background=phColor;
+  $('ctxFase').textContent=(q.fase||'')+(q.tema?' \u2022 '+q.tema:'');
+  $('ctxText').textContent=q.contexto?('\u201C'+q.contexto+'\u201D'):'';
+  ctx.style.display=q.contexto?'block':'none';
+
+  $('qNumber').textContent='Quest\u00e3o '+(idx+1)+' de '+questions.length;
+  $('qText').textContent=q.text;
+  $('qBody').innerHTML='';
+  $('qFeedback').classList.remove('show');
+  $('qFooter').style.display='none';
+
+  var letters='ABCDE';
+  q.options.forEach(function(opt,oi){
+    var btn=document.createElement('button');
+    btn.className='option-btn';
+    btn.innerHTML='<div class="letter">'+letters[oi]+'</div><div style="flex:1">'+opt+'</div>';
+    btn.addEventListener('click',function(){ selectOption(idx,oi); });
+    $('qBody').appendChild(btn);
+  });
+  questionStartTime=Date.now();
+}
+
+function selectOption(qIdx,optIdx){
+  var q=questions[qIdx];
+  var elapsed=Date.now()-questionStartTime;
+  var pts=q.points[optIdx]||0;
+  var isCorrect=(optIdx===q.correct);
+  var maxPts=Math.max.apply(null,q.points);
+
+  // track dimension scores
+  var tema=q.tema||'Geral';
+  if(!dimScores[tema]) dimScores[tema]={earned:0,max:0};
+  dimScores[tema].earned+=pts;
+  dimScores[tema].max+=maxPts;
+
+  var btns=$('qBody').querySelectorAll('.option-btn');
+  btns.forEach(function(btn,i){
+    btn.setAttribute('disabled','');
+    btn.classList.remove('selected');
+    var p=q.points[i]||0;
+    if(p===maxPts&&p>0) btn.classList.add('score-high');
+    else if(p>0) btn.classList.add('score-mid');
+    else btn.classList.add('score-zero');
+    if(i===optIdx) btn.classList.add('selected');
+    var badge=document.createElement('span');
+    badge.className='score-badge '+(p>0?'pos':p<0?'neg':'zero');
+    badge.textContent=(p>0?'+':'')+p+(p===1?' pt':' pts');
+    btn.appendChild(badge);
+  });
+
+  var earnedCoins=Math.max(CONFIG.COINS_FLOOR, pts*CONFIG.COINS_PER_POINT);
+  coins+=earnedCoins; stars+=CONFIG.STARS_PER_QUESTION; totalScore+=pts;
+  $('coinCount').textContent=coins; $('starCount').textContent=stars;
+
+  var fb=q.feedbacks[optIdx]||'';
+  if(pts===maxPts&&pts>0){ $('fbIcon').textContent='\u2B50'; $('fbLabel').textContent='Boa escolha!'; }
+  else if(pts>0){ $('fbIcon').textContent='\uD83D\uDC4D'; $('fbLabel').textContent='Quase l\u00e1!'; }
+  else{ $('fbIcon').textContent='\uD83D\uDCAC'; $('fbLabel').textContent='Vamos pensar\u2026'; }
+  $('fbCoins').textContent='+'+earnedCoins+' \uD83E\uDE99';
+  $('fbMessage').textContent=fb;
+  $('qFeedback').classList.add('show');
+  $('qFooter').style.display='block';
+  setTimeout(function(){ $('qFeedback').scrollIntoView({behavior:'smooth',block:'end'}); },100);
+
+  sendResponse({
+    timestamp:new Date().toISOString(), sessionId:sessionId,
+    participantName:participantName||'An\u00f4nimo', participantAge:participantAge||'\u2014',
+    questionIndex:qIdx, questionText:q.text, fase:q.fase, tema:q.tema,
+    selectedIndex:optIdx, selectedText:q.options[optIdx],
+    isCorrect:isCorrect, pointsEarned:pts, responseTimeMs:elapsed,
+    coinsEarned:earnedCoins, starsEarned:CONFIG.STARS_PER_QUESTION,
+    totalCoins:coins, totalStars:stars, totalScore:totalScore
+  });
+}
+
+$('btnNext').addEventListener('click',function(){
+  currentQ++; updateMapState();
+  if(currentQ>=questions.length) showFinish(); else showQuestion(currentQ);
+});
+
+function showFinish(){
+  showScreen($('finishScreen'));
+  $('finalCoins').textContent=coins;
+  $('finalStars').textContent=stars;
+  $('finalScore').textContent=totalScore;
+
+  // max possible score
+  var maxTotal=0;
+  questions.forEach(function(q){ maxTotal+=Math.max.apply(null,q.points); });
+  var pct=maxTotal>0?Math.round(totalScore/maxTotal*100):0;
+
+  var level='';
+  if(pct>=80) level='<b>Expert Digital</b> \uD83C\uDF1F \u2014 Voc\u00ea demonstrou alta compet\u00eancia emocional online!';
+  else if(pct>=55) level='<b>Explorador Avan\u00e7ado</b> \uD83D\uDCAA \u2014 Voc\u00ea est\u00e1 no caminho certo! Continue praticando empatia digital.';
+  else if(pct>=30) level='<b>Aprendiz Digital</b> \uD83D\uDCD6 \u2014 Voc\u00ea est\u00e1 aprendendo! Pensar nas emo\u00e7\u00f5es dos outros vai te ajudar muito.';
+  else level='<b>Iniciante Curioso</b> \uD83C\uDF31 \u2014 Todo mundo come\u00e7a de algum lugar! Cada situa\u00e7\u00e3o \u00e9 uma chance de aprender.';
+  $('profileLevel').innerHTML=level+'<br><span style="font-size:12px;opacity:.7">Pontua\u00e7\u00e3o: '+totalScore+'/'+maxTotal+' ('+pct+'%)</span>';
+
+  // dimension bars
+  var dimColors={'Consci\u00eancia Emocional':'#5C6BC0','Regula\u00e7\u00e3o Emocional':'#AB47BC','Empatia Digital':'#26A69A'};
+  var barsHTML='';
+  for(var tema in dimScores){
+    var d=dimScores[tema];
+    var dpct=d.max>0?Math.round(d.earned/d.max*100):0;
+    var col=dimColors[tema]||'var(--pink)';
+    barsHTML+='<div class="dim-row"><div class="dim-label">'+tema+'</div><div class="dim-track"><div class="dim-fill" style="width:'+dpct+'%;background:'+col+'"></div></div><div class="dim-val" style="color:'+col+'">'+dpct+'%</div></div>';
+  }
+  $('dimBars').innerHTML=barsHTML;
+}
+
+$('btnReplay').addEventListener('click',function(){
+  currentQ=0;coins=0;stars=0;totalScore=0;dimScores={};
+  $('coinCount').textContent='0';$('starCount').textContent='0';
+  sessionId=(crypto.randomUUID?crypto.randomUUID():'S'+Date.now()+Math.random().toString(36).slice(2,8));
+  updateMapState(); showScreen($('welcomeScreen'));
+});
+
+$('btnStart').addEventListener('click',function(){
+  participantName=$('inputName').value.trim();
+  participantAge=$('inputAge').value.trim();
+  updateMapState(); showQuestion(0);
+});
+
+async function sendResponse(data){
+  if(!CONFIG.SHEETS_URL) return;
+  try{ await fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}); }
+  catch(e){ console.warn('Envio falhou:',e); }
+}
+
+loadQuestions();
+</script>
+</body>
+</html>

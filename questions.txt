@@ -1,0 +1,170 @@
+# Questão 1
+FASE: 🎮 Fase 1 – Jogo Online
+TEMA: Consciência Emocional
+CONTEXTO: Você está jogando com seu amigo João. Ele começa a perder várias vezes e fica bravo, xinga no chat e aperta os botões com força.
+PERGUNTA: O que João está sentindo?
+OPÇÃO: 😄 Feliz
+OPÇÃO: 😐 Normal
+OPÇÃO: 😡 Bravo / com raiva
+OPÇÃO: 😰 Ansioso
+CORRETA: 3
+PONTOS_1: 0
+PONTOS_2: 0
+PONTOS_3: 2
+PONTOS_4: 1
+FEEDBACK_1: Hmm, será que alguém que xinga e aperta os botões com força está feliz? Olhe de novo para os sinais!
+FEEDBACK_2: Quando alguém xinga e age com força, geralmente não está se sentindo normal. Preste atenção nas pistas!
+FEEDBACK_3: Isso mesmo! Xingar e apertar botões com força são sinais claros de raiva. Você soube reconhecer a emoção!
+FEEDBACK_4: Ansiedade pode fazer a gente agir diferente, mas os sinais aqui — xingar e agir com força — são mais de raiva mesmo. Boa tentativa!
+
+# Questão 2
+FASE: 🎮 Fase 1 – Jogo Online
+TEMA: Consciência Emocional
+CONTEXTO: Você está jogando com seu amigo João. Ele começa a perder várias vezes e fica bravo, xinga no chat e aperta os botões com força.
+PERGUNTA: O que você faria?
+OPÇÃO: Ensinar João a jogar melhor
+OPÇÃO: Pedir para ele se acalmar
+OPÇÃO: Xingar junto com ele
+OPÇÃO: Sair do jogo sem falar nada
+CORRETA: 2
+PONTOS_1: 0
+PONTOS_2: 2
+PONTOS_3: 0
+PONTOS_4: 1
+FEEDBACK_1: Ensinar pode ser legal, mas quando alguém está com raiva, primeiro precisa se acalmar para conseguir ouvir.
+FEEDBACK_2: Ótima atitude! Pedir para se acalmar mostra que você se importa com o amigo e com o clima do jogo.
+FEEDBACK_3: Xingar junto só piora a situação para todo mundo. Que tal ajudar seu amigo de outro jeito?
+FEEDBACK_4: Sair é melhor do que brigar, mas deixar o amigo sozinho com a raiva não ajuda ele. Conversar pode ser melhor!
+
+# Questão 3
+FASE: 🎮 Fase 1 – Jogo Online
+TEMA: Consciência Emocional
+CONTEXTO: Você está jogando com seu amigo João. Ele começa a perder várias vezes e fica bravo, xinga no chat e aperta os botões com força.
+PERGUNTA: O que pode acontecer com os outros jogadores?
+OPÇÃO: Não vão perceber
+OPÇÃO: Ficam irritados
+OPÇÃO: Vão achar engraçado
+OPÇÃO: Podem ficar tristes
+CORRETA: 2
+PONTOS_1: 0
+PONTOS_2: 2
+PONTOS_3: 0
+PONTOS_4: 1
+FEEDBACK_1: Na verdade, quando alguém xinga no chat, todo mundo percebe! As emoções de uma pessoa afetam o grupo inteiro.
+FEEDBACK_2: Exatamente! Quando alguém xinga no jogo, os outros jogadores ficam irritados. As emoções se espalham online também!
+FEEDBACK_3: Xingamentos não são engraçados para quem recebe. Pense em como você se sentiria se fosse xingado.
+FEEDBACK_4: Sim, alguns podem ficar tristes! Mas o sentimento mais comum é irritação. Você está no caminho certo!
+
+# Questão 4
+FASE: 💬 Fase 2 – Grupo Online
+TEMA: Regulação Emocional
+CONTEXTO: Você descobre que foi retirado(a) de um grupo. Você pergunta o que aconteceu, mas ninguém responde.
+PERGUNTA: Como você se sentiria?
+OPÇÃO: 😰 Ansioso(a)
+OPÇÃO: 😐 Normal
+OPÇÃO: 😢 Triste
+OPÇÃO: 😡 Bravo(a)
+CORRETA: 3
+PONTOS_1: 1
+PONTOS_2: 0
+PONTOS_3: 2
+PONTOS_4: 0
+FEEDBACK_1: Ansiedade faz sentido nessa situação! Mas ser excluído e ignorado costuma causar principalmente tristeza. Você está atento às emoções!
+FEEDBACK_2: Ser excluído de um grupo e ignorado geralmente não passa batido. É normal sentir algo — reconhecer isso é importante!
+FEEDBACK_3: Isso mesmo! Ser excluído e não receber resposta causa tristeza. Reconhecer esse sentimento é o primeiro passo para lidar com ele.
+FEEDBACK_4: Raiva pode aparecer, mas o sentimento mais profundo nessa situação costuma ser tristeza. Olhe para dentro com calma.
+
+# Questão 5
+FASE: 💬 Fase 2 – Grupo Online
+TEMA: Regulação Emocional
+CONTEXTO: Você descobre que foi retirado(a) de um grupo. Você pergunta o que aconteceu, mas ninguém responde.
+PERGUNTA: O que você faria primeiro para se sentir melhor?
+OPÇÃO: Brigar no chat
+OPÇÃO: Respirar fundo ou fazer outra coisa
+OPÇÃO: Fingir que não aconteceu
+OPÇÃO: Excluir todo mundo dos seus grupos
+CORRETA: 3
+PONTOS_1: 0
+PONTOS_2: 1
+PONTOS_3: 2
+PONTOS_4: 0
+FEEDBACK_1: Brigar no chat só vai piorar a situação e criar mais conflito. Tente se acalmar primeiro!
+FEEDBACK_2: Respirar fundo é uma boa estratégia! Fazer outra coisa que gosta também ajuda a regular a emoção.
+FEEDBACK_3: Não deixar que isso tome conta de você é uma forma inteligente de se proteger. Seguir em frente mostra maturidade emocional!
+FEEDBACK_4: Excluir todo mundo é agir por impulso e pode machucar pessoas que não têm nada a ver com a situação.
+
+# Questão 6
+FASE: 💬 Fase 2 – Grupo Online
+TEMA: Regulação Emocional
+CONTEXTO: Você descobre que foi retirado(a) de um grupo. Você pergunta o que aconteceu, mas ninguém responde.
+PERGUNTA: O que você faria com sua amiga que te excluiu?
+OPÇÃO: Conversar para entender o que aconteceu
+OPÇÃO: Falar mal dela para outras pessoas
+OPÇÃO: Ignorar ela para sempre
+OPÇÃO: Esperar ela responder
+CORRETA: 1
+PONTOS_1: 2
+PONTOS_2: 0
+PONTOS_3: 0
+PONTOS_4: 1
+FEEDBACK_1: Conversar é a melhor forma de resolver! Entender o que aconteceu ajuda a manter a amizade e resolver mal-entendidos.
+FEEDBACK_2: Falar mal só cria mais problemas e magoa as pessoas. Tente conversar diretamente.
+FEEDBACK_3: Ignorar pode parecer fácil, mas não resolve o problema. E você pode perder uma amizade por um mal-entendido.
+FEEDBACK_4: Esperar é ter paciência, e isso é bom! Mas tomar a iniciativa de conversar mostra mais maturidade.
+
+# Questão 7
+FASE: 📱 Fase 3 – Rede Social
+TEMA: Empatia Digital
+CONTEXTO: Seu amigo postou um vídeo cantando e recebeu vários comentários maldosos.
+PERGUNTA: Como ele se sentiria?
+OPÇÃO: 😳 Envergonhado
+OPÇÃO: 😐 Normal
+OPÇÃO: 😢 Chateado
+OPÇÃO: 😴 Cansado
+CORRETA: 3
+PONTOS_1: 0
+PONTOS_2: 0
+PONTOS_3: 2
+PONTOS_4: 1
+FEEDBACK_1: Vergonha pode aparecer, mas o sentimento principal de quem recebe comentários maldosos é ficar chateado e magoado.
+FEEDBACK_2: Receber comentários maldosos sobre algo que você fez com coragem não é algo que passa batido. Pense em como você se sentiria!
+FEEDBACK_3: Isso! Receber comentários maldosos quando se teve coragem de postar algo pessoal chateia muito. Você demonstrou empatia!
+FEEDBACK_4: Cansado é possível, mas o sentimento mais forte aqui é ficar chateado. Tente se colocar no lugar dele!
+
+# Questão 8
+FASE: 📱 Fase 3 – Rede Social
+TEMA: Empatia Digital
+CONTEXTO: Seu amigo postou um vídeo cantando e recebeu vários comentários maldosos.
+PERGUNTA: O que ele pode fazer para lidar com a emoção?
+OPÇÃO: Conversar com um colega sobre o que sentiu
+OPÇÃO: Xingar de volta quem comentou
+OPÇÃO: Fazer outra coisa que goste
+OPÇÃO: Nunca mais postar nada
+CORRETA: 3
+PONTOS_1: 1
+PONTOS_2: 0
+PONTOS_3: 2
+PONTOS_4: 0
+FEEDBACK_1: Conversar com alguém é sempre bom! Compartilhar o que sente ajuda, mas também é importante fazer algo que te faça bem.
+FEEDBACK_2: Xingar de volta só aumenta o problema. Quem responde com raiva pode acabar se prejudicando também.
+FEEDBACK_3: Boa escolha! Fazer algo que goste é uma ótima forma de regular as emoções. Não deixe que os outros controlem como você se sente!
+FEEDBACK_4: Parar de postar por medo é deixar que os outros controlem suas escolhas. Você tem o direito de se expressar!
+
+# Questão 9
+FASE: 📱 Fase 3 – Rede Social
+TEMA: Empatia Digital
+CONTEXTO: Seu amigo postou um vídeo cantando e recebeu vários comentários maldosos.
+PERGUNTA: O que você faria para ajudar seu amigo?
+OPÇÃO: Curtir os comentários negativos
+OPÇÃO: Mandar uma mensagem apoiando ele
+OPÇÃO: Não fazer nada
+OPÇÃO: Postar comentários positivos no vídeo
+CORRETA: 2
+PONTOS_1: 0
+PONTOS_2: 2
+PONTOS_3: 0
+PONTOS_4: 1
+FEEDBACK_1: Curtir comentários negativos é o mesmo que concordar com eles. Isso machuca seu amigo ainda mais!
+FEEDBACK_2: Perfeito! Mandar uma mensagem de apoio mostra que você é um amigo de verdade. Às vezes uma palavra de carinho muda tudo!
+FEEDBACK_3: Quando um amigo está sofrendo e você não faz nada, ele pode se sentir ainda mais sozinho. Sua atitude faz diferença!
+FEEDBACK_4: Comentários positivos ajudam sim! Mas uma mensagem direta e pessoal de apoio tem ainda mais força. Você está no caminho certo!
